@@ -564,8 +564,8 @@ export const SkillCardList = styled.p`
 /* ---------- Footer ---------- */
 
 export const FooterBar = styled.footer`
-  background: var(--primary-black-100);
-  color: var(--primary-white);
+  background: var(--portfolio-footer);
+  color: var(--portfolio-footer-text);
   padding: 80px 0 24px;
 `;
 
@@ -586,7 +586,7 @@ export const FooterLinks = styled.div`
   @media (hover: hover) {
     &:hover > a:not(:hover) {
       background: transparent;
-      color: var(--primary-white);
+      color: var(--portfolio-footer-text);
     }
   }
 `;
@@ -599,8 +599,8 @@ export const FooterLink = styled.a<{ $primary?: boolean }>`
   min-width: 160px;
   padding: 0 24px;
   border-radius: var(--radius-md);
-  border: 1.5px solid var(--primary-white);
-  color: var(--primary-white);
+  border: 1.5px solid var(--portfolio-footer-text);
+  color: var(--portfolio-footer-text);
   text-decoration: none;
   font-size: var(--text-sm);
   font-family: var(--portfolio-mono), monospace;
@@ -610,14 +610,14 @@ export const FooterLink = styled.a<{ $primary?: boolean }>`
   ${({ $primary }) =>
     $primary &&
     css`
-      background: var(--primary-white);
-      color: var(--primary-black-100);
+      background: var(--portfolio-footer-text);
+      color: var(--portfolio-footer);
     `}
 
   @media (hover: hover) {
     &:hover {
-      background: var(--primary-white);
-      color: var(--primary-black-100);
+      background: var(--portfolio-footer-text);
+      color: var(--portfolio-footer);
     }
   }
 
@@ -630,8 +630,8 @@ export const FooterLink = styled.a<{ $primary?: boolean }>`
 export const FooterBottom = styled.div`
   margin-top: 40px;
   padding-top: 32px;
-  border-top: 1px solid var(--primary-black-60);
+  border-top: 1px solid color-mix(in srgb, var(--portfolio-footer-text) 40%, transparent);
   font-size: var(--text-xs);
   font-family: var(--portfolio-mono), monospace;
-  color: var(--primary-black-30);
+  color: color-mix(in srgb, var(--portfolio-footer-text) 70%, transparent);
 `;
