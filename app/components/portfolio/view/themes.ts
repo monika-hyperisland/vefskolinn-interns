@@ -113,7 +113,7 @@ export const themeVariables = (
 
   // React's CSSProperties type doesn't know CSS variables, hence the cast.
   return {
-    "--portfolio-accent": accentColour,
+    "--portfolio-accent": accentColour || DEFAULT_ACCENT_COLOUR,
     "--portfolio-bg": colours.background,
     "--portfolio-text": colours.text,
     "--portfolio-muted": colours.muted,

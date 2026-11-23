@@ -24,7 +24,7 @@ export const PortfolioView = ({ portfolio }: Props) => {
   return (
     <Page
       className={`${portfolioMono.variable} ${portfolioSans.variable} ${portfolioSerif.variable}`}
-      style={themeVariables(portfolio.content.theme)}
+      style={themeVariables(portfolio.content.theme, portfolio.content.accentColor)}
     >
       <Header
         portfolio={portfolio}

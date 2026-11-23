@@ -152,6 +152,7 @@ export const CvLink = styled.a`
   min-width: ${CV_WIDTH};
   padding: 0 24px;
   margin-left: auto;
+  margin-top: -1.5px; /* tucks under the header line, like the tabs sit on it */
   border-radius: 0 0 26px 26px;
   background: var(--portfolio-accent);
   color: var(--primary-black-100);
@@ -167,6 +168,7 @@ export const CvLink = styled.a`
 
   @media (max-width: ${BREAKPOINT}) {
     min-width: 0;
+    min-height: 29px; /* smaller text: a lower button keeps it as close to the line as the tabs' text */
     width: calc(100% / 3); /* same width as the contact tab above it */
     padding: 0 8px;
     font-size: var(--text-xs);

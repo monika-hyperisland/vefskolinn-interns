@@ -110,6 +110,7 @@ export const mockPortfolioContent: PortfolioContent = {
   },
 
   theme: "minimal",
+  accentColor: "#e2552d",
 };
 
 /*
