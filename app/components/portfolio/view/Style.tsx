@@ -193,7 +193,7 @@ export const HeroSection = styled.section<{ $withPhoto?: boolean }>`
     css`
       @media (min-width: ${BREAKPOINT}) {
         display: grid;
-        grid-template-columns: 1fr minmax(200px, 320px);
+        grid-template-columns: 1fr 25%; /* the photo grows with the page, the text keeps its room */
         gap: 32px;
         align-items: center;
       }
@@ -202,27 +202,6 @@ export const HeroSection = styled.section<{ $withPhoto?: boolean }>`
 
 export const HeroText = styled.div`
   min-width: 0; /* lets a long name wrap inside the grid column */
-
-  /* On phones the headline and the tagline share a line and the badge goes
-     under them. The row around the badge and the tagline steps aside (see
-     HeroRow), the badge is moved to the end, and an empty full-width item
-     before it starts a new line. */
-  @media (max-width: ${BREAKPOINT}) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    column-gap: 16px;
-
-    & > h1 {
-      flex-basis: 100%;
-    }
-
-    &::after {
-      content: "";
-      flex-basis: 100%;
-      order: 1;
-    }
-  }
 `;
 
 export const HeroPhoto = styled.div`
@@ -274,8 +253,32 @@ export const NameOutline = styled.span`
   }
 `;
 
-/* On phones the tagline sits on the right, so the two lines form a step. */
-const taglineRightOnPhones = css`
+/* The headline and the tagline share one line; on phones the tagline wraps
+   to its own line and sits on the right, so the two lines form a step. */
+export const HeroLines = styled.p`
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 16px;
+  font-family: var(--portfolio-sans), sans-serif;
+  line-height: 1.15;
+`;
+
+/* A bit smaller than Figma (64px and 50px), so the headline and the tagline
+   still fit on one line next to the photo on the about tab: 52px and 40px
+   at 1280px. Both tabs use the same sizes, so the hero doesn't jump when
+   switching tabs. */
+export const Headline = styled.span`
+  font-size: clamp(1.75rem, 4vw, 3.25rem);
+  font-weight: 700;
+`;
+
+export const Tagline = styled.span`
+  font-family: var(--portfolio-serif), serif;
+  font-size: clamp(1.5rem, 3.1vw, 2.5rem);
+  letter-spacing: 0.02em;
+
   @media (max-width: ${BREAKPOINT}) {
     margin-left: auto;
   }
@@ -302,46 +305,6 @@ export const AvailabilityDot = styled.span`
   background: var(--accent-green-100);
 `;
 
-/* The headline gets its own line; the badge and the tagline share the next
-   one (on phones see HeroText). */
-export const Headline = styled.p`
-  margin: 8px 0 0;
-  font-family: var(--portfolio-sans), sans-serif;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-  font-weight: 700;
-  line-height: 1.15;
-`;
-
-export const HeroRow = styled.div`
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 24px;
-
-  ${Availability} {
-    margin: 0; /* the row already gives the spacing */
-  }
-
-  @media (max-width: ${BREAKPOINT}) {
-    display: contents; /* the badge and the tagline join the text around them */
-
-    ${Availability} {
-      order: 2;
-      margin-top: 16px;
-    }
-  }
-`;
-
-export const Tagline = styled.p`
-  margin: 0;
-  font-family: var(--portfolio-serif), serif;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-  line-height: 1.15;
-  letter-spacing: 0.02em;
-  ${taglineRightOnPhones}
-`;
-
 /* ---------- Works ---------- */
 
 export const WorksSection = styled.section`
@@ -351,7 +314,7 @@ export const WorksSection = styled.section`
 export const WorksHeading = styled.h2`
   margin: 0 0 24px;
   font-family: var(--portfolio-sans), sans-serif;
-  font-size: var(--text-lg);
+  font-size: var(--text-2xl);
   font-weight: 600;
 `;
 
@@ -467,7 +430,7 @@ export const AboutSection = styled.section`
 export const AboutHeading = styled.h2`
   margin: 0 0 16px;
   font-family: var(--portfolio-sans), sans-serif;
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 700;
   letter-spacing: 0.06em;
 `;
@@ -496,9 +459,12 @@ export const Facts = styled.dl`
   border-top: 1.5px solid var(--primary-black-100);
   border-bottom: 1.5px solid var(--primary-black-100);
 
+  /* On phones: 2 × 2 like a table without an outer border, with thin
+     lines only between the cells (see Fact). */
   @media (max-width: ${BREAKPOINT}) {
     grid-auto-flow: row;
     grid-template-columns: repeat(2, 1fr);
+    border: none;
   }
 `;
 
@@ -511,11 +477,22 @@ export const Fact = styled.div`
   }
 
   @media (max-width: ${BREAKPOINT}) {
-    padding: 12px 8px 12px 0;
+    padding: 12px 16px 12px 0;
 
     & + & {
       padding-left: 0;
       border-left: none;
+    }
+
+    /* The right column gets a line on its left… */
+    &:nth-child(even) {
+      padding: 12px 0 12px 16px;
+      border-left: 1px solid var(--primary-black-10);
+    }
+
+    /* …and the second row a line on top. */
+    &:nth-child(n + 3) {
+      border-top: 1px solid var(--primary-black-10);
     }
   }
 `;
@@ -539,7 +516,7 @@ export const FactValue = styled.dd`
 export const SkillsHeading = styled.h2`
   margin: 0 0 24px;
   font-family: var(--portfolio-sans), sans-serif;
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 600;
 `;
 
@@ -585,7 +562,7 @@ export const FooterBar = styled.footer`
 
 export const FooterHeading = styled.h2`
   margin: 0 0 24px;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 3.75vw, 3rem);
   line-height: 1.05;
   font-weight: 700;
 `;
