@@ -19,6 +19,10 @@ type ThemeColours = {
   footerText: string;
   badge: string;
   badgeText: string;
+  /* The logo is a black image; Studio turns it white with a CSS filter. */
+  logoFilter: string;
+  /* The dot in the "Open for work" badge. */
+  badgeDot: string;
 };
 
 type Theme = {
@@ -45,6 +49,8 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       footerText: "#ffffff",
       badge: "#e6f6e9",
       badgeText: "#1e6b34",
+      logoFilter: "none",
+      badgeDot: "#2f9e44",
     },
   },
   editorial: {
@@ -64,6 +70,8 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       footerText: "#1e1e1e",
       badge: "#e6f6e9",
       badgeText: "#1e6b34",
+      logoFilter: "none",
+      badgeDot: "#2f9e44",
     },
   },
   studio: {
@@ -83,6 +91,8 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       footerText: "#111111",
       badge: "#2f9e44",
       badgeText: "#ffffff",
+      logoFilter: "invert(1)",
+      badgeDot: "#ffffff",
     },
   },
 };
@@ -112,5 +122,7 @@ export const themeVariables = (
     "--portfolio-footer-text": colours.footerText,
     "--portfolio-badge": colours.badge,
     "--portfolio-badge-text": colours.badgeText,
+    "--portfolio-logo-filter": colours.logoFilter,
+    "--portfolio-badge-dot": colours.badgeDot,
   } as CSSProperties;
 };

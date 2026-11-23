@@ -62,6 +62,7 @@ export const LogoWrap = styled.div`
   padding-bottom: 12px;
   display: flex;
   align-items: center;
+  filter: var(--portfolio-logo-filter);
   margin-bottom: -24px; /* the header line runs through the middle of the logo */
 
   @media (max-width: ${BREAKPOINT}) {
@@ -226,7 +227,7 @@ export const HeroPhotoPlaceholder = styled(HeroPhoto)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary-black-5);
+  background: var(--portfolio-placeholder);
   color: var(--primary-black-60);
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-xs);
@@ -248,7 +249,7 @@ export const HeroName = styled.h1`
 export const NameOutline = styled.span`
   @supports (-webkit-text-stroke: 1px black) {
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--primary-black-100);
+    -webkit-text-stroke: 1.5px var(--portfolio-text);
   }
 `;
 
@@ -292,8 +293,8 @@ export const Availability = styled.p`
   margin: 16px 0 0;
   padding: 4px 12px;
   border-radius: var(--radius-pill);
-  background: var(--accent-green-10);
-  color: var(--accent-green-text);
+  background: var(--portfolio-badge);
+  color: var(--portfolio-badge-text);
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-xs);
 `;
@@ -302,7 +303,7 @@ export const AvailabilityDot = styled.span`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent-green-100);
+  background: var(--portfolio-badge-dot);
 `;
 
 /* ---------- Works ---------- */
@@ -370,7 +371,7 @@ export const ProjectImage = styled(GalleryItemImage)`
 /* Shown when a project has no image: neutral, like the photo frame in Figma,
    so it doesn't clash with the student's accent colour. */
 export const ProjectPlaceholder = styled(ProjectImage)`
-  background: var(--primary-black-5);
+  background: var(--portfolio-placeholder);
   color: var(--primary-black-60);
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-xs);
@@ -528,7 +529,7 @@ export const SkillGroups = styled.div`
 
 export const SkillCard = styled.div`
   padding: 20px;
-  border: 1.5px solid var(--primary-black-100);
+  border: 1.5px solid var(--portfolio-line);
   border-radius: var(--radius-lg);
 `;
 
