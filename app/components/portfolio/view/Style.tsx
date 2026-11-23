@@ -1,6 +1,6 @@
 "use client";
 import styled, { css } from "styled-components";
-import { GalleryItemImage } from "app/components/gallery/styles";
+import { GalleryItemContainer, GalleryItemImage } from "app/components/gallery/styles";
 
 /* Shared look of the public portfolio page. Fonts and colours come from the
    app's global CSS variables; the three themes are added later (#28). */
@@ -357,6 +357,12 @@ export const WorksGrid = styled.div<{ $columns: 1 | 2 | 3 }>`
   }
 `;
 
+/* The Gallery card with the theme's card colours. */
+export const ProjectCardContainer = styled(GalleryItemContainer)`
+  background: var(--portfolio-surface);
+  color: var(--portfolio-surface-text);
+`;
+
 /* The Gallery image box has a fixed height, which looks flat in a wide
    two-column card. Here it keeps a 16:10 shape at any width. */
 export const ProjectImage = styled(GalleryItemImage)`
@@ -457,8 +463,8 @@ export const Facts = styled.dl`
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
-  border-top: 1.5px solid var(--primary-black-100);
-  border-bottom: 1.5px solid var(--primary-black-100);
+  border-top: 1.5px solid var(--portfolio-line);
+  border-bottom: 1.5px solid var(--portfolio-line);
 
   /* On phones: 2 × 2 like a table without an outer border, with thin
      lines only between the cells (see Fact). */
@@ -474,7 +480,7 @@ export const Fact = styled.div`
 
   & + & {
     padding-left: 20px;
-    border-left: 1px solid var(--primary-black-10);
+    border-left: 1px solid var(--portfolio-divider);
   }
 
   @media (max-width: ${BREAKPOINT}) {
@@ -488,19 +494,19 @@ export const Fact = styled.div`
     /* The right column gets a line on its left… */
     &:nth-child(even) {
       padding: 12px 0 12px 16px;
-      border-left: 1px solid var(--primary-black-10);
+      border-left: 1px solid var(--portfolio-divider);
     }
 
     /* …and the second row a line on top. */
     &:nth-child(n + 3) {
-      border-top: 1px solid var(--primary-black-10);
+      border-top: 1px solid var(--portfolio-divider);
     }
   }
 `;
 
 export const FactLabel = styled.dt`
   margin: 0 0 6px;
-  color: var(--primary-black-60);
+  color: var(--portfolio-muted);
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-xs);
   letter-spacing: 0.08em;
@@ -531,6 +537,8 @@ export const SkillCard = styled.div`
   padding: 20px;
   border: 1.5px solid var(--portfolio-line);
   border-radius: var(--radius-lg);
+  background: var(--portfolio-surface);
+  color: var(--portfolio-surface-text);
 `;
 
 /* Styled like the facts row: a small grey label, the skills big and bold,

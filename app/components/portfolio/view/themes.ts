@@ -23,6 +23,8 @@ type ThemeColours = {
   logoFilter: string;
   /* The dot in the "Open for work" badge. */
   badgeDot: string;
+  /* Thin lines between the facts. */
+  divider: string;
 };
 
 type Theme = {
@@ -51,6 +53,7 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       badgeText: "#1e6b34",
       logoFilter: "none",
       badgeDot: "#2f9e44",
+      divider: "#e6e6e6",
     },
   },
   editorial: {
@@ -72,6 +75,7 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       badgeText: "#1e6b34",
       logoFilter: "none",
       badgeDot: "#2f9e44",
+      divider: "#cfcfcb",
     },
   },
   studio: {
@@ -93,6 +97,7 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       badgeText: "#ffffff",
       logoFilter: "invert(1)",
       badgeDot: "#ffffff",
+      divider: "#3a3a38",
     },
   },
 };
@@ -124,5 +129,6 @@ export const themeVariables = (
     "--portfolio-badge-text": colours.badgeText,
     "--portfolio-logo-filter": colours.logoFilter,
     "--portfolio-badge-dot": colours.badgeDot,
+    "--portfolio-divider": colours.divider,
   } as CSSProperties;
 };

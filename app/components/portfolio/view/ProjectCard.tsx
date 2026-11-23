@@ -2,7 +2,6 @@ import type { PortfolioProject } from "types/portfolioTypes";
 import {
   GalleryActionLink,
   GalleryActions,
-  GalleryItemContainer,
   GalleryItemContent,
   GalleryItemDescription,
   GalleryItemTitle,
@@ -14,6 +13,7 @@ import {
 import {
   DescriptionHover,
   DescriptionPopover,
+  ProjectCardContainer,
   ProjectImage,
   ProjectPlaceholder,
 } from "./Style";
@@ -50,7 +50,7 @@ export const ProjectCard = ({ project }: Props) => {
   const hiddenTechnologies = technologies.slice(MAX_VISIBLE_TECHNOLOGIES);
 
   return (
-    <GalleryItemContainer>
+    <ProjectCardContainer>
       {imageUrl ? (
         <ProjectImage>
           {/* eslint-disable-next-line @next/next/no-img-element -- students host project images anywhere */}
@@ -123,6 +123,6 @@ export const ProjectCard = ({ project }: Props) => {
           </GalleryActions>
         )}
       </GalleryItemContent>
-    </GalleryItemContainer>
+    </ProjectCardContainer>
   );
 };
