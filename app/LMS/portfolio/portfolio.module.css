@@ -1,0 +1,23 @@
+.builder {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  background: var(--primary-white);
+}
+
+.workspace {
+  display: flex;
+  min-height: 740px;
+}
+
+@media (max-width: 950px) {
+  .workspace {
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 700px) {
+  .workspace {
+    flex-direction: column;
+  }
+}
