@@ -10,10 +10,9 @@ const CV_WIDTH = "144px";
 const LOGO_TEXT_OFFSET = "50px";
 
 export const Page = styled.div`
-  --portfolio-accent: #e8622a;
   min-height: 100%;
-  background: var(--primary-white);
-  color: var(--primary-black-100);
+  background: var(--portfolio-bg);
+  color: var(--portfolio-text);
   display: flex;
   flex-direction: column;
 `;
@@ -49,7 +48,7 @@ export const HeaderRow = styled.div`
     bottom: 0;
     /* A border, not a 1.5px-high background: browsers round borders the same
        way as the tab outlines, so the line matches their thickness. */
-    border-bottom: 1.5px solid var(--primary-black-100);
+    border-bottom: 1.5px solid var(--portfolio-line);
   }
 
   @media (max-width: ${BREAKPOINT}) {
@@ -85,15 +84,15 @@ export const Tab = styled.button<{ $active: boolean }>`
   min-height: 32px;
   min-width: ${CV_WIDTH};
   padding: 0 24px;
-  border: 1.5px solid var(--primary-black-100);
+  border: 1.5px solid var(--portfolio-line);
   border-radius: 26px 26px 0 0;
   font: inherit;
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   cursor: pointer;
-  background: var(--primary-white);
-  color: var(--primary-black-100);
+  background: transparent;
+  color: var(--portfolio-text);
 
   position: relative;
 
@@ -105,8 +104,8 @@ export const Tab = styled.button<{ $active: boolean }>`
     $active &&
     css`
       z-index: 1; /* the active tab's full outline sits above its neighbours */
-      background: var(--primary-black-100);
-      color: var(--primary-white);
+      background: var(--portfolio-tab-active);
+      color: var(--portfolio-tab-active-text);
     `}
 
   &:focus-visible {
@@ -136,7 +135,7 @@ export const Location = styled.span`
   font-family: var(--portfolio-mono), monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--primary-black-60);
+  color: var(--portfolio-muted);
 
   @media (max-width: ${BREAKPOINT}) {
     padding-left: 0;
@@ -275,6 +274,7 @@ export const Headline = styled.span`
 `;
 
 export const Tagline = styled.span`
+  color: var(--portfolio-accent);
   font-family: var(--portfolio-serif), serif;
   font-size: clamp(1.5rem, 3.1vw, 2.5rem);
   letter-spacing: 0.02em;

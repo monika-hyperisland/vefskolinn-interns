@@ -8,6 +8,7 @@ import { Hero } from "./Hero";
 import { Works } from "./Works";
 import { Footer } from "./Footer";
 import { About } from "./About";
+import { themeVariables } from "./themes";
 import { portfolioMono, portfolioSans, portfolioSerif } from "./fonts";
 
 type Props = {
@@ -23,6 +24,7 @@ export const PortfolioView = ({ portfolio }: Props) => {
   return (
     <Page
       className={`${portfolioMono.variable} ${portfolioSans.variable} ${portfolioSerif.variable}`}
+      style={themeVariables(portfolio.content.theme)}
     >
       <Header
         portfolio={portfolio}

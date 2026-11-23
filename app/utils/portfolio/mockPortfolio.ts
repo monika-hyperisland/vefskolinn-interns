@@ -109,7 +109,7 @@ export const mockPortfolioContent: PortfolioContent = {
     cvUrl: "https://example.com/anna-jonsdottir-cv.pdf",
   },
 
-  theme: "editorial",
+  theme: "minimal",
 };
 
 /*
