@@ -56,8 +56,6 @@ export function useDraft() {
   const [isPublishing, setIsPublishing] = useState(false);
   // Error when loading or saving a local draft
   const [error, setError] = useState<string | null>(null);
-
-  // Load an existing local draft when the hook starts
   
   // Load the local draft first, or the published portfolio
   useEffect(() => {
@@ -85,31 +83,36 @@ export function useDraft() {
         const saved = localStorage.getItem(key);
         
         if (saved) {
-          const localDraft = JSON.parse(saved) as LocalDraft;
+        try {
+            const localDraft = JSON.parse(saved) as LocalDraft;
 
-          const availableFrom = new Date(
+            const availableFrom = new Date(
             localDraft.content.availability.availableFrom
-          );
+            );
 
-          if (Number.isNaN(availableFrom.getTime())) {
+            if (Number.isNaN(availableFrom.getTime())) {
             throw new Error("Invalid availability date");
-          }
+            }
 
-          if (!active) return;
+            if (!active) return;
 
-          setDraft({
+            setDraft({
             ...localDraft,
             content: {
-              ...localDraft.content,
-              availability: {
+                ...localDraft.content,
+                availability: {
                 ...localDraft.content.availability,
                 availableFrom,
-              },
+                },
             },
-          });
+            });
 
-          setHasLocalChanges(true);
-          return;
+            setHasLocalChanges(true);
+            return;
+        } catch (error) {
+            console.warn("Removing invalid local portfolio draft:", error);
+            localStorage.removeItem(key);
+        }
         }
 
         // No local draft? Load the portfolio from the server

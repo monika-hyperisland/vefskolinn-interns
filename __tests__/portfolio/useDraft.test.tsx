@@ -378,4 +378,18 @@ describe("useDraft", () => {
     ).toBe("2027-01-15T00:00:00.000Z");
   });
 
+  it("removes an invalid local draft and falls back to the server", async () => {
+  localStorage.setItem("portfolio-draft:test-student", "{ broken json");
+
+  const { result } = renderHook(() => useDraft());
+
+  await waitFor(() => {
+    expect(result.current.isLoaded).toBe(true);
+  });
+
+  expect(localStorage.getItem("portfolio-draft:test-student")).toBeNull();
+  expect(getMyPortfolio).toHaveBeenCalled();
+  expect(result.current.error).toBeNull();
+    });
+
 });
