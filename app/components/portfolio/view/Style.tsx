@@ -2,8 +2,8 @@
 import styled, { css } from "styled-components";
 import { GalleryItemContainer, GalleryItemImage } from "app/components/gallery/styles";
 
-/* Shared look of the public portfolio page. Fonts and colours come from the
-   app's global CSS variables; the three themes are added later (#28). */
+/* Shared look of the public portfolio page. Colours come from the
+   --portfolio-* variables that themes.ts sets for the chosen theme. */
 
 const BREAKPOINT = "768px";
 const CV_WIDTH = "144px";
