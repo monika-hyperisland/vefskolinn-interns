@@ -36,7 +36,7 @@ function createEmptyPortfolio(): PortfolioContent {
       cvUrl: "",
     },
 
-    theme: "editorial",
+    theme: "minimal",
   };
 }
 
