@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { upload } from "@vercel/blob/client";
 import {
   CV_CONTENT_TYPE,
   CV_MAX_UPLOAD_BYTES,
-  CV_UPLOAD_ENDPOINT,
+  uploadCv,
 } from "utils/portfolio/cvUpload";
 import styles from "./ContactStep.module.css";
 
@@ -56,17 +55,8 @@ export default function ContactStep({ contact, updateContact, ready = true }: Co
 
     setUploadingCv(true);
     try {
-      const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-") || "cv.pdf";
-      const result = await upload(
-        "portfolio-cv/" + safeFileName,
-        file,
-        {
-          access: "public",
-          handleUploadUrl: CV_UPLOAD_ENDPOINT,
-          contentType: CV_CONTENT_TYPE,
-        }
-      );
-      setCvUrl(result.url);
+      const url = await uploadCv(file);
+      setCvUrl(url);
       setCvFileName(file.name);
       setCvFileSize(file.size);
 
