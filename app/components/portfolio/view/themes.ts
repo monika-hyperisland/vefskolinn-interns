@@ -93,7 +93,7 @@ export const PORTFOLIO_THEMES: Record<PortfolioTheme, Theme> = {
       activeTabText: "#111111",
       footer: "#fffaef",
       footerText: "#111111",
-      badge: "#2f9e44",
+      badge: "#265B30",
       badgeText: "#ffffff",
       logoFilter: "invert(1)",
       badgeDot: "#ffffff",
