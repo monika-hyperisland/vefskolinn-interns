@@ -1,3 +1,4 @@
+import { mockLocalDraft } from "../../app/utils/portfolio/mockPortfolio";
 import { fireEvent, render, screen } from "@testing-library/react";
 import PortfolioBuilderPage from "../../app/LMS/portfolio/page";
 
@@ -13,6 +14,7 @@ jest.mock("serverActions/portfolio/getPortfolioStudentId", () => ({
 }));
 
 describe("Portfolio Builder shell", () => {
+  beforeEach(() => localStorage.clear());
   test("shows four steps and starts on Profile", async () => {
     render(<PortfolioBuilderPage />);
 
@@ -44,11 +46,12 @@ describe("Portfolio Builder shell", () => {
   });
 
   test("renders the real PortfolioView and switches device widths", async () => {
+    localStorage.setItem("portfolio-draft:test-student", JSON.stringify({ ...mockLocalDraft, basedOn: null, content: { ...mockLocalDraft.content, projects: [{ ...mockLocalDraft.content.projects[0], title: "My saved project" }] } }));
     const { container } = render(<PortfolioBuilderPage />);
     await screen.findByText("Not published yet");
 
-    expect(screen.getByText("Nordic Trails")).toBeInTheDocument();
-    expect(screen.getByText("Sample data until your draft is connected")).toBeInTheDocument();
+    expect(screen.getByText("My saved project")).toBeInTheDocument();
+    expect(screen.queryByText("Sample data until your draft is connected")).not.toBeInTheDocument();
 
     const desktop = screen.getByRole("button", { name: "Desktop" });
     const mobile = screen.getByRole("button", { name: "Mobile" });

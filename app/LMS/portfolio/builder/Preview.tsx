@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 import { PortfolioView } from "app/components/portfolio/view/PortfolioView";
-import { mockPublicPortfolio } from "app/utils/portfolio/mockPortfolio";
 import type { PublicPortfolio } from "types/portfolioTypes";
 import styles from "./Preview.module.css";
 
 type PreviewProps = {
-  portfolio?: PublicPortfolio;
+  portfolio: PublicPortfolio;
 };
 
-export default function Preview({ portfolio = mockPublicPortfolio }: PreviewProps) {
+export default function Preview({ portfolio }: PreviewProps) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
 
   return (
@@ -19,7 +18,6 @@ export default function Preview({ portfolio = mockPublicPortfolio }: PreviewProp
         <div className={styles.previewLabel}>
           <span className={styles.dot} aria-hidden="true" />
           Portfolio preview
-          <span className={styles.sampleLabel}>Sample data until your draft is connected</span>
         </div>
         <div className={styles.devices} role="group" aria-label="Preview device options">
           <button
