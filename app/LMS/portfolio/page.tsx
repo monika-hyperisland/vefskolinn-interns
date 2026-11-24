@@ -11,7 +11,8 @@ import type { PortfolioStepId } from "./builder/steps";
 export default function PortfolioBuilderPage() {
   const [activeStep, setActiveStep] = useState<PortfolioStepId>("profile");
   const { 
-    draft, 
+    draft,
+    updateContact,
     isLoaded,
     error,
   } = useDraft();
@@ -30,7 +31,7 @@ export default function PortfolioBuilderPage() {
 
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
-        <SidePanel activeStep={activeStep} />
+        <SidePanel activeStep={activeStep} contact={draft.content.contact} updateContact={updateContact} contactReady={isLoaded && !error} />
         <Preview />
       </div>
     </main>

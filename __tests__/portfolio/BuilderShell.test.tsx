@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { upload } from "@vercel/blob/client";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import PortfolioBuilderPage from "../../app/LMS/portfolio/page";
 
 jest.mock("serverActions/portfolio/getMyPortfolio", () => ({
@@ -12,7 +13,36 @@ jest.mock("serverActions/portfolio/getPortfolioStudentId", () => ({
   getPortfolioStudentId: jest.fn().mockResolvedValue("test-student"),
 }));
 
+jest.mock("@vercel/blob/client", () => ({ upload: jest.fn() }));
+
 describe("Portfolio Builder shell", () => {
+  beforeEach(() => localStorage.clear());
+
+  test("saves uploaded CV in the draft and restores it after reopening", async () => {
+    const url = "https://blob.example/student-cv.pdf";
+    (upload as jest.Mock).mockResolvedValue({ url });
+    const first = render(<PortfolioBuilderPage />);
+    await screen.findByText("Not published yet");
+    fireEvent.click(screen.getByRole("button", { name: "Contact" }));
+    fireEvent.change(screen.getByLabelText("Upload CV"), {
+      target: { files: [new File(["pdf"], "cv.pdf", { type: "application/pdf" })] },
+    });
+    await waitFor(() => {
+      const saved = JSON.parse(localStorage.getItem("portfolio-draft:test-student") || "{}");
+      expect(saved.content?.contact.cvUrl).toBe(url);
+    });
+    first.unmount();
+    render(<PortfolioBuilderPage />);
+    await screen.findByText("Not published yet");
+    fireEvent.click(screen.getByRole("button", { name: "Contact" }));
+    expect(await screen.findByRole("link", { name: "View uploaded CV" })).toHaveAttribute("href", url);
+    fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+    await waitFor(() => {
+      const saved = JSON.parse(localStorage.getItem("portfolio-draft:test-student") || "{}");
+      expect(saved.content?.contact.cvUrl).toBe("");
+    });
+  });
+
   test("shows four steps and starts on Profile", async () => {
     render(<PortfolioBuilderPage />);
 
