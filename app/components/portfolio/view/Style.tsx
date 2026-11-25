@@ -1,19 +1,18 @@
 "use client";
 import styled, { css } from "styled-components";
-import { GalleryItemImage } from "app/components/gallery/styles";
+import { GalleryItemContainer, GalleryItemImage } from "app/components/gallery/styles";
 
-/* Shared look of the public portfolio page. Fonts and colours come from the
-   app's global CSS variables; the three themes are added later (#28). */
+/* Shared look of the public portfolio page. Colours come from the
+   --portfolio-* variables that themes.ts sets for the chosen theme. */
 
 const BREAKPOINT = "768px";
 const CV_WIDTH = "144px";
 const LOGO_TEXT_OFFSET = "50px";
 
 export const Page = styled.div`
-  --portfolio-accent: #e8622a;
   min-height: 100%;
-  background: var(--primary-white);
-  color: var(--primary-black-100);
+  background: var(--portfolio-bg);
+  color: var(--portfolio-text);
   display: flex;
   flex-direction: column;
 `;
@@ -49,7 +48,7 @@ export const HeaderRow = styled.div`
     bottom: 0;
     /* A border, not a 1.5px-high background: browsers round borders the same
        way as the tab outlines, so the line matches their thickness. */
-    border-bottom: 1.5px solid var(--primary-black-100);
+    border-bottom: 1.5px solid var(--portfolio-line);
   }
 
   @media (max-width: ${BREAKPOINT}) {
@@ -63,6 +62,7 @@ export const LogoWrap = styled.div`
   padding-bottom: 12px;
   display: flex;
   align-items: center;
+  filter: var(--portfolio-logo-filter);
   margin-bottom: -24px; /* the header line runs through the middle of the logo */
 
   @media (max-width: ${BREAKPOINT}) {
@@ -85,15 +85,15 @@ export const Tab = styled.button<{ $active: boolean }>`
   min-height: 32px;
   min-width: ${CV_WIDTH};
   padding: 0 24px;
-  border: 1.5px solid var(--primary-black-100);
+  border: 1.5px solid var(--portfolio-line);
   border-radius: 26px 26px 0 0;
   font: inherit;
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   cursor: pointer;
-  background: var(--primary-white);
-  color: var(--primary-black-100);
+  background: transparent;
+  color: var(--portfolio-text);
 
   position: relative;
 
@@ -105,8 +105,8 @@ export const Tab = styled.button<{ $active: boolean }>`
     $active &&
     css`
       z-index: 1; /* the active tab's full outline sits above its neighbours */
-      background: var(--primary-black-100);
-      color: var(--primary-white);
+      background: var(--portfolio-tab-active);
+      color: var(--portfolio-tab-active-text);
     `}
 
   &:focus-visible {
@@ -136,7 +136,7 @@ export const Location = styled.span`
   font-family: var(--portfolio-mono), monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--primary-black-60);
+  color: var(--portfolio-muted);
 
   @media (max-width: ${BREAKPOINT}) {
     padding-left: 0;
@@ -152,6 +152,7 @@ export const CvLink = styled.a`
   min-width: ${CV_WIDTH};
   padding: 0 24px;
   margin-left: auto;
+  margin-top: -1.5px; /* tucks under the header line, like the tabs sit on it */
   border-radius: 0 0 26px 26px;
   background: var(--portfolio-accent);
   color: var(--primary-black-100);
@@ -167,6 +168,7 @@ export const CvLink = styled.a`
 
   @media (max-width: ${BREAKPOINT}) {
     min-width: 0;
+    min-height: 29px; /* smaller text: a lower button keeps it as close to the line as the tabs' text */
     width: calc(100% / 3); /* same width as the contact tab above it */
     padding: 0 8px;
     font-size: var(--text-xs);
@@ -181,19 +183,58 @@ export const Main = styled.main`
   padding: 64px 0 96px;
 `;
 
-/* Placeholder until the real sections arrive (#25 Hero, #26 Works, #27 About). */
-export const SectionPlaceholder = styled.section`
-  border: 1.5px dashed var(--primary-black-30);
-  border-radius: var(--radius-lg);
-  padding: 40px 24px;
-  color: var(--primary-black-60);
-  text-align: center;
-`;
-
 /* ---------- Hero ---------- */
 
-export const HeroSection = styled.section`
+export const HeroSection = styled.section<{ $withPhoto?: boolean }>`
   margin-bottom: 48px;
+
+  /* On the about tab the photo sits to the right of the name;
+     on phones it moves under the text. */
+  ${({ $withPhoto }) =>
+    $withPhoto &&
+    css`
+      @media (min-width: ${BREAKPOINT}) {
+        display: grid;
+        grid-template-columns: 1fr 25%; /* the photo grows with the page, the text keeps its room */
+        gap: 32px;
+        align-items: center;
+      }
+    `}
+`;
+
+export const HeroText = styled.div`
+  min-width: 0; /* lets a long name wrap inside the grid column */
+`;
+
+export const HeroPhoto = styled.div`
+  margin-top: 24px;
+  aspect-ratio: 1 / 1; /* the builder asks for square photos */
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  @media (min-width: ${BREAKPOINT}) {
+    margin-top: 0;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+/* Neutral, like the project image placeholder. */
+export const HeroPhotoPlaceholder = styled(HeroPhoto)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--portfolio-placeholder);
+  color: var(--primary-black-60);
+  font-family: var(--portfolio-mono), monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 `;
 
 export const HeroName = styled.h1`
@@ -210,28 +251,40 @@ export const HeroName = styled.h1`
 export const NameOutline = styled.span`
   @supports (-webkit-text-stroke: 1px black) {
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--primary-black-100);
+    -webkit-text-stroke: 1.5px var(--portfolio-text);
   }
 `;
 
+/* The headline and the tagline share one line; on phones the tagline wraps
+   to its own line and sits on the right, so the two lines form a step. */
 export const HeroLines = styled.p`
   margin: 8px 0 0;
   display: flex;
-  flex-wrap: wrap; /* on phones the tagline moves to its own line */
+  flex-wrap: wrap;
   align-items: baseline;
   column-gap: 16px;
   font-family: var(--portfolio-sans), sans-serif;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
   line-height: 1.15;
 `;
 
+/* A bit smaller than Figma (64px and 50px), so the headline and the tagline
+   still fit on one line next to the photo on the about tab: 52px and 40px
+   at 1280px. Both tabs use the same sizes, so the hero doesn't jump when
+   switching tabs. */
 export const Headline = styled.span`
+  font-size: clamp(1.75rem, 4vw, 3.25rem);
   font-weight: 700;
 `;
 
 export const Tagline = styled.span`
+  color: var(--portfolio-accent);
   font-family: var(--portfolio-serif), serif;
+  font-size: clamp(1.5rem, 3.1vw, 2.5rem);
   letter-spacing: 0.02em;
+
+  @media (max-width: ${BREAKPOINT}) {
+    margin-left: auto;
+  }
 `;
 
 /* Shown only while the student is open to an internship. */
@@ -242,8 +295,8 @@ export const Availability = styled.p`
   margin: 16px 0 0;
   padding: 4px 12px;
   border-radius: var(--radius-pill);
-  background: var(--accent-green-10);
-  color: var(--accent-green-text);
+  background: var(--portfolio-badge);
+  color: var(--portfolio-badge-text);
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-xs);
 `;
@@ -252,7 +305,7 @@ export const AvailabilityDot = styled.span`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent-green-100);
+  background: var(--portfolio-badge-dot);
 `;
 
 /* ---------- Works ---------- */
@@ -264,7 +317,7 @@ export const WorksSection = styled.section`
 export const WorksHeading = styled.h2`
   margin: 0 0 24px;
   font-family: var(--portfolio-sans), sans-serif;
-  font-size: var(--text-lg);
+  font-size: var(--text-2xl);
   font-weight: 600;
 `;
 
@@ -306,6 +359,12 @@ export const WorksGrid = styled.div<{ $columns: 1 | 2 | 3 }>`
   }
 `;
 
+/* The Gallery card with the theme's card colours. */
+export const ProjectCardContainer = styled(GalleryItemContainer)`
+  background: var(--portfolio-surface);
+  color: var(--portfolio-surface-text);
+`;
+
 /* The Gallery image box has a fixed height, which looks flat in a wide
    two-column card. Here it keeps a 16:10 shape at any width. */
 export const ProjectImage = styled(GalleryItemImage)`
@@ -320,7 +379,7 @@ export const ProjectImage = styled(GalleryItemImage)`
 /* Shown when a project has no image: neutral, like the photo frame in Figma,
    so it doesn't clash with the student's accent colour. */
 export const ProjectPlaceholder = styled(ProjectImage)`
-  background: var(--primary-black-5);
+  background: var(--portfolio-placeholder);
   color: var(--primary-black-60);
   font-family: var(--portfolio-mono), monospace;
   font-size: var(--text-xs);
@@ -371,17 +430,150 @@ export const DescriptionHover = styled.div`
   }
 `;
 
+/* ---------- About ---------- */
+
+export const AboutSection = styled.section`
+  margin-bottom: 48px;
+`;
+
+export const AboutHeading = styled.h2`
+  margin: 0 0 16px;
+  font-family: var(--portfolio-sans), sans-serif;
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+`;
+
+export const AboutText = styled.div`
+  max-width: 65ch; /* comfortable line length for reading */
+  font-family: var(--portfolio-sans), sans-serif;
+  font-size: var(--text-base);
+  line-height: 1.6;
+
+  p {
+    margin: 0 0 1em;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+/* One row of facts between two lines; 2 × 2 on phones. */
+export const Facts = styled.dl`
+  margin: 0 0 48px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border-top: 1.5px solid var(--portfolio-line);
+  border-bottom: 1.5px solid var(--portfolio-line);
+
+  /* On phones: 2 × 2 like a table without an outer border, with thin
+     lines only between the cells (see Fact). */
+  @media (max-width: ${BREAKPOINT}) {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, 1fr);
+    border: none;
+  }
+`;
+
+export const Fact = styled.div`
+  padding: 20px 16px 20px 0;
+
+  & + & {
+    padding-left: 20px;
+    border-left: 1px solid var(--portfolio-divider);
+  }
+
+  @media (max-width: ${BREAKPOINT}) {
+    padding: 12px 16px 12px 0;
+
+    & + & {
+      padding-left: 0;
+      border-left: none;
+    }
+
+    /* The right column gets a line on its left… */
+    &:nth-child(even) {
+      padding: 12px 0 12px 16px;
+      border-left: 1px solid var(--portfolio-divider);
+    }
+
+    /* …and the second row a line on top. */
+    &:nth-child(n + 3) {
+      border-top: 1px solid var(--portfolio-divider);
+    }
+  }
+`;
+
+export const FactLabel = styled.dt`
+  margin: 0 0 6px;
+  color: var(--portfolio-muted);
+  font-family: var(--portfolio-mono), monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+`;
+
+export const FactValue = styled.dd`
+  margin: 0;
+  font-family: var(--portfolio-sans), sans-serif;
+  font-size: var(--text-base);
+  font-weight: 700;
+`;
+
+export const SkillsHeading = styled.h2`
+  margin: 0 0 24px;
+  font-family: var(--portfolio-sans), sans-serif;
+  font-size: var(--text-3xl);
+  font-weight: 600;
+`;
+
+export const SkillGroups = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px 48px;
+`;
+
+export const SkillCard = styled.div`
+  padding: 20px;
+  border: 1.5px solid var(--portfolio-line);
+  border-radius: var(--radius-lg);
+  background: var(--portfolio-surface);
+  color: var(--portfolio-surface-text);
+`;
+
+/* Styled like the facts row: a small grey label, the skills big and bold,
+   because the skills are what a recruiter looks for. */
+export const SkillCardTitle = styled.h3`
+  margin: 0 0 8px;
+  color: var(--primary-black-60);
+  font-family: var(--portfolio-mono), monospace;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+`;
+
+export const SkillCardList = styled.p`
+  margin: 0;
+  font-family: var(--portfolio-sans), sans-serif;
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1.5;
+`;
+
 /* ---------- Footer ---------- */
 
 export const FooterBar = styled.footer`
-  background: var(--primary-black-100);
-  color: var(--primary-white);
+  background: var(--portfolio-footer);
+  color: var(--portfolio-footer-text);
   padding: 80px 0 24px;
 `;
 
 export const FooterHeading = styled.h2`
   margin: 0 0 24px;
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2rem, 3.75vw, 3rem);
   line-height: 1.05;
   font-weight: 700;
 `;
@@ -396,7 +588,7 @@ export const FooterLinks = styled.div`
   @media (hover: hover) {
     &:hover > a:not(:hover) {
       background: transparent;
-      color: var(--primary-white);
+      color: var(--portfolio-footer-text);
     }
   }
 `;
@@ -409,8 +601,8 @@ export const FooterLink = styled.a<{ $primary?: boolean }>`
   min-width: 160px;
   padding: 0 24px;
   border-radius: var(--radius-md);
-  border: 1.5px solid var(--primary-white);
-  color: var(--primary-white);
+  border: 1.5px solid var(--portfolio-footer-text);
+  color: var(--portfolio-footer-text);
   text-decoration: none;
   font-size: var(--text-sm);
   font-family: var(--portfolio-mono), monospace;
@@ -420,14 +612,14 @@ export const FooterLink = styled.a<{ $primary?: boolean }>`
   ${({ $primary }) =>
     $primary &&
     css`
-      background: var(--primary-white);
-      color: var(--primary-black-100);
+      background: var(--portfolio-footer-text);
+      color: var(--portfolio-footer);
     `}
 
   @media (hover: hover) {
     &:hover {
-      background: var(--primary-white);
-      color: var(--primary-black-100);
+      background: var(--portfolio-footer-text);
+      color: var(--portfolio-footer);
     }
   }
 
@@ -440,8 +632,8 @@ export const FooterLink = styled.a<{ $primary?: boolean }>`
 export const FooterBottom = styled.div`
   margin-top: 40px;
   padding-top: 32px;
-  border-top: 1px solid var(--primary-black-60);
+  border-top: 1px solid color-mix(in srgb, var(--portfolio-footer-text) 40%, transparent);
   font-size: var(--text-xs);
   font-family: var(--portfolio-mono), monospace;
-  color: var(--primary-black-30);
+  color: color-mix(in srgb, var(--portfolio-footer-text) 70%, transparent);
 `;

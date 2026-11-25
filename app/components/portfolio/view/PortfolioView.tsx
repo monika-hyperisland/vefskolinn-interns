@@ -3,10 +3,12 @@
 import { useState } from "react";
 import type { PublicPortfolio } from "types/portfolioTypes";
 import { Header, type PortfolioTab } from "./Header";
-import { Container, Main, Page, SectionPlaceholder } from "./Style";
+import { Container, Main, Page} from "./Style";
 import { Hero } from "./Hero";
 import { Works } from "./Works";
 import { Footer } from "./Footer";
+import { About } from "./About";
+import { themeVariables } from "./themes";
 import { portfolioMono, portfolioSans, portfolioSerif } from "./fonts";
 
 type Props = {
@@ -22,6 +24,7 @@ export const PortfolioView = ({ portfolio }: Props) => {
   return (
     <Page
       className={`${portfolioMono.variable} ${portfolioSans.variable} ${portfolioSerif.variable}`}
+      style={themeVariables(portfolio.content.theme, portfolio.content.accentColor)}
     >
       <Header
         portfolio={portfolio}
@@ -34,11 +37,14 @@ export const PortfolioView = ({ portfolio }: Props) => {
           <Hero
             profile={portfolio.content.profile}
             availability={portfolio.content.availability}
+            showPhoto={activeTab === "about"}
           />
           {activeTab === "work" ? (
             <Works projects={portfolio.content.projects} />
           ) : (
-            <SectionPlaceholder>About</SectionPlaceholder>
+            <About 
+              profile={portfolio.content.profile} 
+              availability={portfolio.content.availability} />
           )}
         </Container>
       </Main>
