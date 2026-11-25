@@ -1,48 +1,28 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useDraft } from "./builder/useDraft";
+import { useState } from "react";
 import styles from "./portfolio.module.css";
 import TopBar from "./builder/TopBar";
 import StepRail from "./builder/StepRail";
 import SidePanel from "./builder/SidePanel";
 import Preview from "./builder/Preview";
 import type { PortfolioStepId } from "./builder/steps";
-import { getMyPortfolio } from "serverActions/portfolio/getMyPortfolio";
 
 export default function PortfolioBuilderPage() {
   const [activeStep, setActiveStep] = useState<PortfolioStepId>("profile");
-  const [publicationStatus, setPublicationStatus] = useState("Checking publication status...");
+  const { 
+    draft, 
+    isLoaded,
+    error,
+  } = useDraft();
 
-  useEffect(() => {
-    let active = true;
-
-    async function loadPortfolioStatus() {
-      try {
-        const result = await getMyPortfolio();
-        if (!active) return;
-
-        if (!result.success) {
-          setPublicationStatus("Status unavailable");
-        } else if (!result.data) {
-          setPublicationStatus("Not published yet");
-        } else if (result.data.visibility === "public") {
-          setPublicationStatus("Published");
-        } else {
-          setPublicationStatus("Hidden");
-        }
-      } catch {
-        if (active) {
-          setPublicationStatus("Status unavailable");
-        }
-      }
-    }
-
-    void loadPortfolioStatus();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+  const publicationStatus = !isLoaded
+  ? "Checking portfolio..."
+  : error
+    ? "Status unavailable"
+    : draft.basedOn
+      ? "Published"
+      : "Not published yet";
 
   return (
     <main className={styles.builder} aria-label="Portfolio Builder">

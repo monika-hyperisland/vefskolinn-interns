@@ -8,6 +8,10 @@ jest.mock("serverActions/portfolio/getMyPortfolio", () => ({
   }),
 }));
 
+jest.mock("serverActions/portfolio/getPortfolioStudentId", () => ({
+  getPortfolioStudentId: jest.fn().mockResolvedValue("test-student"),
+}));
+
 describe("Portfolio Builder shell", () => {
   test("shows four steps and starts on Profile", async () => {
     render(<PortfolioBuilderPage />);
