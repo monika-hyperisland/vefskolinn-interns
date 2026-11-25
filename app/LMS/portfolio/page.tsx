@@ -11,10 +11,11 @@ import type { PortfolioStepId } from "./builder/steps";
 export default function PortfolioBuilderPage() {
   const [activeStep, setActiveStep] = useState<PortfolioStepId>("profile");
   const { 
-    draft,
-    updateContact,
+    draft, 
     isLoaded,
     error,
+    setTheme,
+    updateContact,
   } = useDraft();
 
   const publicationStatus = !isLoaded
@@ -22,7 +23,7 @@ export default function PortfolioBuilderPage() {
   : error
     ? "Status unavailable"
     : draft.basedOn
-      ? "Existing portfolio"
+      ? "Published"
       : "Not published yet";
 
   return (
@@ -31,8 +32,8 @@ export default function PortfolioBuilderPage() {
 
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
-        <SidePanel activeStep={activeStep} contact={draft.content.contact} updateContact={updateContact} contactReady={isLoaded && !error} />
-        <Preview />
+        <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} updateContact={updateContact} contactReady={isLoaded && !error} />
+        <Preview draft={draft} />
       </div>
     </main>
   );

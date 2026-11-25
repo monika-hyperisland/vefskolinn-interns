@@ -55,6 +55,9 @@ export type PortfolioContent = {
   };
 
   theme: PortfolioTheme;
+
+  /* The CV button and the tagline. Empty means the default orange. */
+  accentColor?: string;
 };
 
 /**
