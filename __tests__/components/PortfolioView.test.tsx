@@ -204,6 +204,18 @@ describe("PortfolioView", () => {
     expect(screen.queryByRole("heading", { name: /Projects I'm proud of/ })).not.toBeInTheDocument();
   });
 
+  it("colours the page with the student's theme and accent colour", () => {
+    const portfolio: PublicPortfolio = {
+      content: { ...mockPublicPortfolio.content, theme: "studio", accentColor: "#3b82f6" },
+    };
+
+    const { container } = render(<PortfolioView portfolio={portfolio} />);
+    const page = container.firstElementChild as HTMLElement;
+
+    expect(page.style.getPropertyValue("--portfolio-bg")).toBe("#000000");
+    expect(page.style.getPropertyValue("--portfolio-accent")).toBe("#3b82f6");
+  });
+
   describe("about tab", () => {
     const { profile, availability } = mockPublicPortfolio.content;
 

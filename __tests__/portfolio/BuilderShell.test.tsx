@@ -19,6 +19,7 @@ jest.mock("serverActions/portfolio/getPortfolioAvatar", () => ({
 
 describe("Portfolio Builder shell", () => {
   test("updates the live preview and retains profile edits across steps", async () => {
+    localStorage.clear();
     render(<PortfolioBuilderPage />);
     await screen.findByText("Not published yet");
     fireEvent.change(screen.getByLabelText("Role / headline"), { target: { value: "My live headline" } });
@@ -28,7 +29,10 @@ describe("Portfolio Builder shell", () => {
     expect(screen.getByLabelText("Role / headline")).toHaveValue("My live headline");
   });
 
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   test("shows four steps and starts on Profile", async () => {
     render(<PortfolioBuilderPage />);
 
@@ -50,7 +54,16 @@ describe("Portfolio Builder shell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Theme" }));
     expect(screen.getByRole("heading", { name: "Pick a look" })).toBeInTheDocument();
-    expect(screen.getByText("Theme settings will go here.")).toBeInTheDocument();
+    expect(screen.getByRole("radiogroup", { name: "Portfolio theme" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /minimal/i })).toBeChecked();
+    expect(screen.getByRole("radio", { name: /editorial/i })).not.toBeChecked();
+    expect(screen.getByRole("radio", { name: /studio/i })).not.toBeChecked();
+    expect(screen.getByText("White, high contrast")).toBeInTheDocument();
+    expect(screen.getByText("Soft grey")).toBeInTheDocument();
+    expect(screen.getByText("Dark, high contrast")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: /studio/i }));
+    expect(screen.getByRole("radio", { name: /studio/i })).toBeChecked();
+    expect(screen.getByRole("button", { name: "Selected Studio" })).toBeDisabled();
     expect(screen.getByText("Step 3 of 4")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Contact" }));
@@ -60,7 +73,7 @@ describe("Portfolio Builder shell", () => {
   });
 
   test("renders the real PortfolioView and switches device widths", async () => {
-    localStorage.setItem("portfolio-draft:test-student", JSON.stringify({ ...mockLocalDraft, basedOn: null, content: { ...mockLocalDraft.content, projects: [{ ...mockLocalDraft.content.projects[0], title: "My saved project" }] } }));
+    localStorage.setItem("portfolio-draft:test-student", JSON.stringify({ ...mockLocalDraft, basedOn: null, content: { ...mockLocalDraft.content, theme: "minimal", projects: [{ ...mockLocalDraft.content.projects[0], title: "My saved project" }] } }));
     const { container } = render(<PortfolioBuilderPage />);
     await screen.findByText("Not published yet");
 
@@ -80,7 +93,7 @@ describe("Portfolio Builder shell", () => {
     fireEvent.click(desktop);
     expect(desktop).toHaveAttribute("aria-pressed", "true");
     expect(container.querySelector('[data-device="desktop"]')).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Editorial" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Selected Minimal" })).toBeDisabled();
   });
 
   test("shows Not published yet when no portfolio exists", async () => {

@@ -21,7 +21,6 @@ function createEmptyPortfolio(): PortfolioContent {
       skills: [],
       languages: [],
     },
-
     availability: {
       openToInternships: false,
       availableFrom: new Date(),
@@ -36,7 +35,6 @@ function createEmptyPortfolio(): PortfolioContent {
       githubUrl: "",
       cvUrl: "",
     },
-
     theme: "minimal",
   };
 }

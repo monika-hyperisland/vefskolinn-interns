@@ -4,13 +4,16 @@ import ProfileStep, { type ProfileProps } from "../steps/ProfileStep";
 import ProjectsStep from "../steps/ProjectsStep";
 import ThemeStep from "../steps/ThemeStep";
 import ContactStep from "../steps/ContactStep";
+import type { LocalDraft, PortfolioTheme } from "types/portfolioTypes";
 
 type SidePanelProps = ProfileProps & {
   activeStep: PortfolioStepId;
+  draft: LocalDraft;
+  setTheme: (theme: PortfolioTheme) => void;
 };
 
 // The form fields for each step belong to their own GitHub tasks.
-export default function SidePanel({ activeStep, ...profileProps }: SidePanelProps) {
+export default function SidePanel({ activeStep, draft, setTheme, ...profileProps }: SidePanelProps) {
   const stepNumber = PORTFOLIO_STEPS.findIndex((step) => step.id === activeStep) + 1;
   const stepName = PORTFOLIO_STEPS[stepNumber - 1].label;
 
@@ -27,7 +30,7 @@ export default function SidePanel({ activeStep, ...profileProps }: SidePanelProp
     title = "Choose your best work";
     description = "Select projects from your course submissions. You can add up to six. Drag to change the order.";
   } else if (activeStep === "theme") {
-    stepContent = <ThemeStep />;
+    stepContent = <ThemeStep draft={draft} setTheme={setTheme} />;
     title = "Pick a look";
     description = "Your content stays the same — only the style changes. You can switch any time.";
   } else {
