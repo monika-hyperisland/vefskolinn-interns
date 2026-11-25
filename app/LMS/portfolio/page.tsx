@@ -11,7 +11,9 @@ import type { PortfolioStepId } from "./builder/steps";
 export default function PortfolioBuilderPage() {
   const [activeStep, setActiveStep] = useState<PortfolioStepId>("profile");
   const { 
-    draft, 
+    draft,
+    updateProfile,
+    updateAvailability,
     isLoaded,
     error,
     setTheme,
@@ -31,7 +33,7 @@ export default function PortfolioBuilderPage() {
 
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
-        <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} />
+        {isLoaded && !error && <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} profile={draft.content.profile} availability={draft.content.availability} updateProfile={updateProfile} updateAvailability={updateAvailability} />}
         {isLoaded && !error ? <Preview draft={draft} /> : <p role="status">{error || "Loading preview..."}</p>}
       </div>
     </main>

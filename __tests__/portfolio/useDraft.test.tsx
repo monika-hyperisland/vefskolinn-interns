@@ -393,3 +393,5 @@ describe("useDraft", () => {
     });
 
 });
+
+jest.mock("serverActions/portfolio/getPortfolioAvatar", () => ({ getPortfolioAvatar: jest.fn().mockResolvedValue(null) }));
