@@ -32,7 +32,7 @@ export default function PortfolioBuilderPage() {
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
         <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} />
-        <Preview draft={draft} />
+        {isLoaded && !error ? <Preview draft={draft} /> : <p role="status">{error || "Loading preview..."}</p>}
       </div>
     </main>
   );
