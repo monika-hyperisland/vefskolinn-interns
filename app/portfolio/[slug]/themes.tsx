@@ -1,6 +1,6 @@
 export const themes = {
-  editorial: { label: "Editorial" },
   minimal: { label: "Minimal" },
+  editorial: { label: "Editorial" },
   studio: { label: "Studio" },
 } as const;
 

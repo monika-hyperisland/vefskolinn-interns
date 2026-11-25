@@ -8,10 +8,12 @@ import SidePanel from "./builder/SidePanel";
 import Preview from "./builder/Preview";
 import type { PortfolioStepId } from "./builder/steps";
 import { getMyPortfolio } from "serverActions/portfolio/getMyPortfolio";
+import { useDraft } from "./builder/useDraft";
 
 export default function PortfolioBuilderPage() {
   const [activeStep, setActiveStep] = useState<PortfolioStepId>("profile");
   const [publicationStatus, setPublicationStatus] = useState("Checking publication status...");
+  const { draft, setTheme } = useDraft();
 
   useEffect(() => {
     let active = true;
@@ -50,8 +52,8 @@ export default function PortfolioBuilderPage() {
 
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
-        <SidePanel activeStep={activeStep} />
-        <Preview />
+        <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} />
+        <Preview draft={draft} />
       </div>
     </main>
   );
