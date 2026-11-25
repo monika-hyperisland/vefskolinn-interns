@@ -22,7 +22,7 @@ export default function PortfolioBuilderPage() {
     ? "Status unavailable"
     : draft.basedOn
       ? "Published"
-      : "Hidden";
+      : "Not published yet";
 
   return (
     <main className={styles.builder} aria-label="Portfolio Builder">
