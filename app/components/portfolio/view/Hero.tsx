@@ -4,10 +4,10 @@ import {
   Availability,
   AvailabilityDot,
   Headline,
+  HeroLines,
   HeroName,
   HeroPhoto,
   HeroPhotoPlaceholder,
-  HeroRow,
   HeroSection,
   HeroText,
   NameOutline,
@@ -46,13 +46,13 @@ export const Hero = ({ profile, availability, showPhoto = false }: Props) => {
             </>
           )}
         </HeroName>
-        {headline && <Headline>{headline}</Headline>}
-        {(badge || tagline) && (
-          <HeroRow>
-            {badge}
+        {(headline || tagline) && (
+          <HeroLines>
+            {headline && <Headline>{headline}</Headline>}
             {tagline && <Tagline>{tagline}</Tagline>}
-          </HeroRow>
+          </HeroLines>
         )}
+        {badge}
       </HeroText>
       {showPhoto &&
         (profile.photoUrl ? (
