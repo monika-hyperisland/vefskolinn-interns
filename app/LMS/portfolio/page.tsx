@@ -21,8 +21,8 @@ export default function PortfolioBuilderPage() {
   : error
     ? "Status unavailable"
     : draft.basedOn
-      ? "Existing portfolio"
-      : "Not published yet";
+      ? "Published"
+      : "Hidden";
 
   return (
     <main className={styles.builder} aria-label="Portfolio Builder">
