@@ -14,6 +14,7 @@ export default function PortfolioBuilderPage() {
     draft, 
     isLoaded,
     error,
+    setTheme,
   } = useDraft();
 
   const publicationStatus = !isLoaded
