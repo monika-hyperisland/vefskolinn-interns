@@ -13,7 +13,21 @@ jest.mock("serverActions/portfolio/getPortfolioStudentId", () => ({
   getPortfolioStudentId: jest.fn().mockResolvedValue("test-student"),
 }));
 
+jest.mock("serverActions/portfolio/getPortfolioAvatar", () => ({
+  getPortfolioAvatar: jest.fn().mockResolvedValue(null),
+}));
+
 describe("Portfolio Builder shell", () => {
+  test("updates the live preview and retains profile edits across steps", async () => {
+    render(<PortfolioBuilderPage />);
+    await screen.findByText("Not published yet");
+    fireEvent.change(screen.getByLabelText("Role / headline"), { target: { value: "My live headline" } });
+    expect(screen.getByText("My live headline")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Projects" }));
+    fireEvent.click(screen.getByRole("button", { name: "Profile" }));
+    expect(screen.getByLabelText("Role / headline")).toHaveValue("My live headline");
+  });
+
   beforeEach(() => localStorage.clear());
   test("shows four steps and starts on Profile", async () => {
     render(<PortfolioBuilderPage />);

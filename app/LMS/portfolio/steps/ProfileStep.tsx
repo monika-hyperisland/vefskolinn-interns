@@ -5,12 +5,28 @@ import Image from "next/image";
 import { ImageUploadField } from "UIcomponents/imageUpload/ImageUploadField";
 import styles from "./ProfileStep.module.css";
 
-// Issue #34: these values are local until the shared draft API is connected.
-export default function ProfileStep() {
-  const [name, setName] = useState("");
-  const [headline, setHeadline] = useState("");
-  const [tagline, setTagline] = useState("");
-  const [about, setAbout] = useState("");
+import type { PortfolioContent } from "types/portfolioTypes";
+
+export type ProfileProps = {
+  profile?: PortfolioContent["profile"];
+  availability?: PortfolioContent["availability"];
+  updateProfile?: (changes: Partial<PortfolioContent["profile"]>) => void;
+  updateAvailability?: (changes: Partial<PortfolioContent["availability"]>) => void;
+};
+
+export default function ProfileStep({ profile, availability, updateProfile, updateAvailability }: ProfileProps = {}) {
+  const [localName, setLocalName] = useState<string>("");
+  const name = profile?.name ?? localName;
+  function setName(value: string) { setLocalName(value); updateProfile?.({ name: value }); }
+  const [localHeadline, setLocalHeadline] = useState<string>("");
+  const headline = profile?.headline ?? localHeadline;
+  function setHeadline(value: string) { setLocalHeadline(value); updateProfile?.({ headline: value }); }
+  const [localTagline, setLocalTagline] = useState<string>("");
+  const tagline = profile?.tagline ?? localTagline;
+  function setTagline(value: string) { setLocalTagline(value); updateProfile?.({ tagline: value }); }
+  const [localAbout, setLocalAbout] = useState<string>("");
+  const about = profile?.about ?? localAbout;
+  function setAbout(value: string) { setLocalAbout(value); updateProfile?.({ about: value }); }
   const aboutWordCount = (about.match(/\S+/g) || []).length;
 
   function updateAbout(text: string) {
@@ -18,15 +34,32 @@ export default function ProfileStep() {
       setAbout(text);
     }
   }
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [location, setLocation] = useState("");
-  const [languages, setLanguages] = useState<string[]>([]);
+  const [localPhotoUrl, setLocalPhotoUrl] = useState<string>("");
+  const photoUrl = profile ? (profile.photoUrl ?? "") : localPhotoUrl;
+  function setPhotoUrl(value: string) { setLocalPhotoUrl(value); updateProfile?.({ photoUrl: value }); }
+  const [localLocation, setLocalLocation] = useState<string>("");
+  const location = profile?.location ?? localLocation;
+  function setLocation(value: string) { setLocalLocation(value); updateProfile?.({ location: value }); }
+  const [localLanguages, setLocalLanguages] = useState<string[]>([]);
+  const languages = profile?.languages ?? localLanguages;
+  function setLanguages(value: string[]) { setLocalLanguages(value); updateProfile?.({ languages: value }); }
   const [newLanguage, setNewLanguage] = useState("");
-  const [skills, setSkills] = useState<string[]>([]);
+  const [localSkills, setLocalSkills] = useState<string[]>([]);
+  const skills = profile?.skills ?? localSkills;
+  function setSkills(value: string[]) { setLocalSkills(value); updateProfile?.({ skills: value }); }
   const [newSkill, setNewSkill] = useState("");
-  const [openToInternships, setOpenToInternships] = useState(false);
-  const [availableFrom, setAvailableFrom] = useState("");
-  const [lookingFor, setLookingFor] = useState("");
+  const [localOpenToInternships, setLocalOpenToInternships] = useState<boolean>(false);
+  const openToInternships = availability?.openToInternships ?? localOpenToInternships;
+  function setOpenToInternships(value: boolean) { setLocalOpenToInternships(value); updateAvailability?.({ openToInternships: value }); }
+  const [localAvailableFrom, setLocalAvailableFrom] = useState("");
+  const availableFrom = availability ? new Date(availability.availableFrom).toISOString().slice(0, 7) : localAvailableFrom;
+  function setAvailableFrom(value: string) {
+    setLocalAvailableFrom(value);
+    if (value) updateAvailability?.({ availableFrom: new Date(value + "-01T00:00:00Z") });
+  }
+  const [localLookingFor, setLocalLookingFor] = useState<string>("");
+  const lookingFor = availability?.lookingFor ?? localLookingFor;
+  function setLookingFor(value: string) { setLocalLookingFor(value); updateAvailability?.({ lookingFor: value }); }
 
   function addSkill() {
     const skill = newSkill.trim();
@@ -149,7 +182,7 @@ export default function ProfileStep() {
         </div>
       </div>
 
-      <p className={styles.draftNote}>Your changes are local to this page for now. Saving and live preview will be connected in a separate task.</p>
+      <p className={styles.draftNote}>Your changes are saved in your draft.</p>
     </form>
   );
 }

@@ -4,6 +4,7 @@
 import type { LocalDraft, PortfolioContent } from "types/portfolioTypes";
 import { getMyPortfolio } from "serverActions/portfolio/getMyPortfolio";
 import { useCallback, useEffect, useState } from "react";
+import { getPortfolioAvatar } from "serverActions/portfolio/getPortfolioAvatar";
 import { getPortfolioStudentId } from "serverActions/portfolio/getPortfolioStudentId";
 const STORAGE_KEY = "portfolio-draft";
 
@@ -123,6 +124,15 @@ export function useDraft() {
         if (!result.success) {
           setError("Could not load your published portfolio.");
           return;
+        }
+
+        if (!result.data) {
+          const avatar = await getPortfolioAvatar().catch(() => null);
+          if (!active) return;
+          if (avatar) setDraft(previous => ({
+            ...previous,
+            content: { ...previous.content, profile: { ...previous.content.profile, photoUrl: avatar } },
+          }));
         }
 
         if (result.data) {
