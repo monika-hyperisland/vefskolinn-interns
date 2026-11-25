@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { PortfolioView } from "app/components/portfolio/view/PortfolioView";
-import type { PublicPortfolio } from "types/portfolioTypes";
+import type { LocalDraft, PublicPortfolio } from "types/portfolioTypes";
 import styles from "./Preview.module.css";
 
 type PreviewProps = {
-  portfolio: PublicPortfolio;
+  draft: LocalDraft;
 };
 
-export default function Preview({ portfolio }: PreviewProps) {
+export default function Preview({ draft }: PreviewProps) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
-
+  const previewPortfolio: PublicPortfolio = { content: draft.content };
   return (
     <section className={styles.preview} aria-label="Portfolio preview">
       <div className={styles.toolbar}>
@@ -39,16 +39,24 @@ export default function Preview({ portfolio }: PreviewProps) {
 
       <div className={styles.previewBody}>
         <div className={device === "mobile" ? styles.mobile : styles.desktop} data-device={device}>
-          <PortfolioView portfolio={portfolio} />
+          <PortfolioView portfolio={previewPortfolio} />
         </div>
       </div>
 
       <div className={styles.themeBar} aria-label="Preview theme options">
         <span>Theme</span>
         <div className={styles.themeButtons}>
-          <button type="button" disabled className={styles.selectedTheme}>Editorial</button>
-          <button type="button" disabled>Minimal</button>
-          <button type="button" disabled>Studio</button>
+          {(["minimal","editorial", "studio"] as const).map((theme) => (
+            <button
+              type="button"
+              key={theme}
+              disabled
+              className={draft.content.theme === theme ? styles.selectedTheme : undefined}
+              aria-label={`${draft.content.theme === theme ? "Selected " : ""}${theme.charAt(0).toUpperCase() + theme.slice(1)}`}
+            >
+              {theme.charAt(0).toUpperCase() + theme.slice(1)}
+            </button>
+          ))}
         </div>
       </div>
     </section>

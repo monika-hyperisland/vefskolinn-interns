@@ -44,6 +44,10 @@ const KNOWN_UNUSED_FILES: string[] = [
   "app/models/canvasCourse.ts",
   "app/models/canvasLineItem.ts",
   "app/models/canvasUser.ts",
+  // Issue #37 theme UI; planned for integration in a follow-up ticket.
+  "app/portfolio/[slug]/ThemeStep.tsx",
+  "app/portfolio/[slug]/themes.tsx",
+  "app/portfolio/[slug]/useDraft.tsx",
 ];
 
 /**

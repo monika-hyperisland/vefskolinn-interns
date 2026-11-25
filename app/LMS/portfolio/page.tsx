@@ -14,6 +14,7 @@ export default function PortfolioBuilderPage() {
     draft, 
     isLoaded,
     error,
+    setTheme,
   } = useDraft();
 
   const publicationStatus = !isLoaded
@@ -21,7 +22,7 @@ export default function PortfolioBuilderPage() {
   : error
     ? "Status unavailable"
     : draft.basedOn
-      ? "Existing portfolio"
+      ? "Published"
       : "Not published yet";
 
   return (
@@ -30,8 +31,8 @@ export default function PortfolioBuilderPage() {
 
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
-        <SidePanel activeStep={activeStep} />
-        {isLoaded && !error ? <Preview portfolio={{ content: draft.content }} /> : <p role="status">{error || "Loading preview..."}</p>}
+        <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} />
+        {isLoaded && !error ? <Preview draft={draft} /> : <p role="status">{error || "Loading preview..."}</p>}
       </div>
     </main>
   );
