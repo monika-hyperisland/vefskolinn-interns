@@ -13,6 +13,10 @@ jest.mock("serverActions/portfolio/getPortfolioStudentId", () => ({
 }));
 
 describe("Portfolio Builder shell", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   test("shows four steps and starts on Profile", async () => {
     render(<PortfolioBuilderPage />);
 
@@ -34,7 +38,16 @@ describe("Portfolio Builder shell", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Theme" }));
     expect(screen.getByRole("heading", { name: "Pick a look" })).toBeInTheDocument();
-    expect(screen.getByText("Theme settings will go here.")).toBeInTheDocument();
+    expect(screen.getByRole("radiogroup", { name: "Portfolio theme" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /minimal/i })).toBeChecked();
+    expect(screen.getByRole("radio", { name: /editorial/i })).not.toBeChecked();
+    expect(screen.getByRole("radio", { name: /studio/i })).not.toBeChecked();
+    expect(screen.getByText("White, high contrast")).toBeInTheDocument();
+    expect(screen.getByText("Soft grey")).toBeInTheDocument();
+    expect(screen.getByText("Dark, high contrast")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: /studio/i }));
+    expect(screen.getByRole("radio", { name: /studio/i })).toBeChecked();
+    expect(screen.getByRole("button", { name: "Selected Studio" })).toBeDisabled();
     expect(screen.getByText("Step 3 of 4")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Contact" }));
@@ -63,7 +76,7 @@ describe("Portfolio Builder shell", () => {
     fireEvent.click(desktop);
     expect(desktop).toHaveAttribute("aria-pressed", "true");
     expect(container.querySelector('[data-device="desktop"]')).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Editorial" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Selected Minimal" })).toBeDisabled();
   });
 
   test("shows Not published yet when no portfolio exists", async () => {
