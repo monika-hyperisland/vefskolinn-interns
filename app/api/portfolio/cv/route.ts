@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { auth } from "../../../../auth";
 
-export const CV_MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
-const CV_CONTENT_TYPE = "application/pdf";
+import { CV_MAX_UPLOAD_BYTES, CV_CONTENT_TYPE } from "utils/portfolio/cvUpload";
 
 /**
  * Issues a short-lived, user-scoped token for uploading a portfolio CV.

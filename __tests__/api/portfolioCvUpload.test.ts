@@ -4,7 +4,8 @@
 import { NextRequest } from "next/server";
 import { handleUpload } from "@vercel/blob/client";
 import { auth } from "../../auth";
-import { POST, CV_MAX_UPLOAD_BYTES } from "app/api/portfolio/cv/route";
+import { POST } from "app/api/portfolio/cv/route";
+import { CV_MAX_UPLOAD_BYTES } from "utils/portfolio/cvUpload";
 
 jest.mock("../../auth", () => ({ auth: jest.fn() }));
 jest.mock("@vercel/blob/client", () => ({ handleUpload: jest.fn() }));

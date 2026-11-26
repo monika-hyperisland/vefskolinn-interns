@@ -14,7 +14,6 @@ describe("Contact step", () => {
     const linkedin = screen.getByRole("textbox", { name: "LinkedIn" }) as HTMLInputElement;
     const github = screen.getByRole("textbox", { name: "GitHub" }) as HTMLInputElement;
     const cv = screen.getByLabelText("Upload CV") as HTMLInputElement;
-    const emailVisibility = screen.getByRole("checkbox", { name: "Show e-mail address publicly" });
 
     expect(email.type).toBe("email");
     expect(email.required).toBe(false);
@@ -24,15 +23,13 @@ describe("Contact step", () => {
     expect(cv.type).toBe("file");
     expect(cv.accept).toContain("application/pdf");
     expect(email.value).toBe("");
-    expect(emailVisibility).toBeDisabled();
   });
 
-  test("allows students to enter and change their contact links and choose email visibility", () => {
+  test("allows students to enter and change their contact links", () => {
     render(<ContactStep />);
     const email = screen.getByRole("textbox", { name: /Email/ }) as HTMLInputElement;
     const linkedin = screen.getByRole("textbox", { name: "LinkedIn" }) as HTMLInputElement;
     const github = screen.getByRole("textbox", { name: "GitHub" }) as HTMLInputElement;
-    const emailVisibility = screen.getByRole("checkbox", { name: "Show e-mail address publicly" });
 
     fireEvent.change(email, { target: { value: "student@example.com" } });
     fireEvent.change(linkedin, { target: { value: "https://www.linkedin.com/in/student" } });
@@ -41,15 +38,10 @@ describe("Contact step", () => {
     expect(email.value).toBe("student@example.com");
     expect(linkedin.value).toBe("https://www.linkedin.com/in/student");
     expect(github.value).toBe("https://github.com/student");
-    expect(emailVisibility).toBeEnabled();
 
-    fireEvent.click(emailVisibility);
-    expect(emailVisibility).toBeChecked();
 
     fireEvent.change(email, { target: { value: "" } });
     expect(email.value).toBe("");
-    expect(emailVisibility).not.toBeChecked();
-    expect(emailVisibility).toBeDisabled();
   });
 
   test("uploads a PDF CV through the authenticated CV endpoint", async () => {

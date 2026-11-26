@@ -22,10 +22,24 @@ type ContactProps = {
 };
 
 export default function ContactStep({ contact, updateContact, ready = true }: ContactProps = {}) {
-  const [email, setEmail] = useState("");
-  const [showEmailPublicly, setShowEmailPublicly] = useState(false);
-  const [linkedin, setLinkedin] = useState("");
-  const [github, setGithub] = useState("");
+  const [localEmail, setLocalEmail] = useState("");
+  const email = contact ? contact.email ?? "" : localEmail;
+  function setEmail(value: string) {
+    setLocalEmail(value);
+    updateContact?.({ email: value });
+  }
+  const [localLinkedin, setLocalLinkedin] = useState("");
+  const linkedin = contact ? contact.linkedinUrl ?? "" : localLinkedin;
+  function setLinkedin(value: string) {
+    setLocalLinkedin(value);
+    updateContact?.({ linkedinUrl: value });
+  }
+  const [localGithub, setLocalGithub] = useState("");
+  const github = contact ? contact.githubUrl ?? "" : localGithub;
+  function setGithub(value: string) {
+    setLocalGithub(value);
+    updateContact?.({ githubUrl: value });
+  }
   const [localCvUrl, setLocalCvUrl] = useState("");
   const cvUrl = contact ? contact.cvUrl ?? "" : localCvUrl;
   function setCvUrl(url: string) {
@@ -84,22 +98,13 @@ export default function ContactStep({ contact, updateContact, ready = true }: Co
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
-            if (!event.target.value.trim()) setShowEmailPublicly(false);
           }}
           placeholder="you@example.com"
         />
-        <small>Your email is private unless you choose to show it on your portfolio.</small>
+        <small>Only enter an email address you want to share when you publish.</small>
       </label>
 
-      <label className={styles.toggleRow}>
-        <span>Show e-mail address publicly</span>
-        <input
-          type="checkbox"
-          checked={showEmailPublicly}
-          disabled={!email.trim()}
-          onChange={(event) => setShowEmailPublicly(event.target.checked)}
-        />
-      </label>
+
 
       <label className={styles.field}>
         <span>LinkedIn</span>
