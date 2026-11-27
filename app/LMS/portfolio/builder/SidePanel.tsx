@@ -44,7 +44,7 @@ export default function SidePanel({
     updateProject={updateProject}
     removeProject={removeProject}/>;
     title = "Choose your best work";
-    description = "Select projects from your course submissions. You can add up to six. Drag to change the order.";
+    description = "Showcase your best work. You can add up to six projects with images, technologies, and links. Drag to change the order.";
   } else if (activeStep === "theme") {
     stepContent = <ThemeStep draft={draft} setTheme={setTheme} />;
     title = "Pick a look";
