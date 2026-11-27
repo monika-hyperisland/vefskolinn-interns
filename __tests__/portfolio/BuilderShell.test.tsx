@@ -15,6 +15,12 @@ jest.mock("serverActions/portfolio/getPortfolioStudentId", () => ({
 describe("Portfolio Builder shell", () => {
   beforeEach(() => {
     window.localStorage.clear();
+   
+        // Provide a project ID generator in the Jest environment.
+    Object.defineProperty(window.crypto, "randomUUID", {
+      configurable: true,
+      value: jest.fn(() => "test-project-id"),
+    });
   });
 
   test("shows four steps and starts on Profile", async () => {
@@ -27,15 +33,16 @@ describe("Portfolio Builder shell", () => {
     expect(screen.getByLabelText("Name")).toBeInTheDocument();
   });
 
-  test("switches to each placeholder step", async () => {
+  test("switches to each portfolio step", async () => {
     render(<PortfolioBuilderPage />);
     await screen.findByText("Not published yet");
 
     fireEvent.click(screen.getByRole("button", { name: "Projects" }));
     expect(screen.getByRole("heading", { name: "Choose your best work" })).toBeInTheDocument();
-    expect(screen.getByText("Project selection will go here.")).toBeInTheDocument();
-    expect(screen.getByText("Step 2 of 4")).toBeInTheDocument();
-
+    expect(
+      screen.getByRole("button", { name: /Add Project/i })
+    ).toBeInTheDocument();   
+     expect(screen.getByText("Step 2 of 4")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Theme" }));
     expect(screen.getByRole("heading", { name: "Pick a look" })).toBeInTheDocument();
     expect(screen.getByRole("radiogroup", { name: "Portfolio theme" })).toBeInTheDocument();
@@ -60,8 +67,19 @@ describe("Portfolio Builder shell", () => {
     const { container } = render(<PortfolioBuilderPage />);
     await screen.findByText("Not published yet");
 
-    expect(screen.getByText("Nordic Trails")).toBeInTheDocument();
-    expect(screen.getByText("Sample data until your draft is connected")).toBeInTheDocument();
+   expect(
+  screen.getByText("Profile and contact information still use sample data")
+).toBeInTheDocument();
+
+fireEvent.click(screen.getByRole("button", { name: "Projects" }));
+fireEvent.click(screen.getByRole("button", { name: /Add Project/i }));
+
+fireEvent.change(
+  screen.getByRole("textbox", { name: "Project title" }),
+  { target: { value: "My Test Project" } }
+);
+
+expect(await screen.findByText("My Test Project")).toBeInTheDocument();
 
     const desktop = screen.getByRole("button", { name: "Desktop" });
     const mobile = screen.getByRole("button", { name: "Mobile" });

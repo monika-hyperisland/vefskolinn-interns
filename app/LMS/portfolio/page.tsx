@@ -15,6 +15,9 @@ export default function PortfolioBuilderPage() {
     isLoaded,
     error,
     setTheme,
+    addProject,
+    updateProject,
+    removeProject,
   } = useDraft();
 
   const publicationStatus = !isLoaded
@@ -31,7 +34,14 @@ export default function PortfolioBuilderPage() {
 
       <div className={styles.workspace}>
         <StepRail activeStep={activeStep} onStepChange={setActiveStep} />
-        <SidePanel activeStep={activeStep} draft={draft} setTheme={setTheme} />
+        <SidePanel
+          activeStep={activeStep}
+          draft={draft}
+          setTheme={setTheme}
+          addProject={addProject}
+          updateProject={updateProject}
+          removeProject={removeProject}
+        />
         <Preview draft={draft} />
       </div>
     </main>
