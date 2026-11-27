@@ -19,6 +19,7 @@ export default function Preview({ portfolio = mockPublicPortfolio, draft }: Prev
           content: {
             ...portfolio.content,
             theme: draft.content.theme,
+            projects: draft.content.projects,
           },
         }
       : portfolio;
@@ -28,7 +29,8 @@ export default function Preview({ portfolio = mockPublicPortfolio, draft }: Prev
         <div className={styles.previewLabel}>
           <span className={styles.dot} aria-hidden="true" />
           Portfolio preview
-          <span className={styles.sampleLabel}>Sample data until your draft is connected</span>
+          <span className={styles.sampleLabel}>  Profile and contact information still use sample data
+</span>
         </div>
         <div className={styles.devices} role="group" aria-label="Preview device options">
           <button

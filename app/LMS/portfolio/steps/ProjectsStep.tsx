@@ -2,42 +2,34 @@
 import { useState } from "react";
 import { ImageUploadField } from "UIcomponents/imageUpload/ImageUploadField";
 import styles from "./ProjectsStep.module.css";
+import type { PortfolioProject } from "types/portfolioTypes";
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string | null;
-  technologies: string[];
-  liveUrl: string;
-  githubUrl: string;
-}
+type ProjectsStepProps = {
+  projects: PortfolioProject[];
+  addProject: () => void;
+  updateProject: (
+    id: string,
+    changes: Partial<PortfolioProject>
+  ) => void;
+  removeProject: (id: string) => void;
+};
 
-export default function ProjectsStep() {
-  const [projects, setProjects] = useState<Project[]>([]);
+export default function ProjectsStep({
+  projects,
+  addProject,
+  updateProject: updateDraftProject,
+  removeProject,
+}: ProjectsStepProps) {
   const [newTechnology, setNewTechnology] = useState("");
 
-  const generateId = () => `project-${Date.now()}`;
-
-  const addProject = () => {
-    const newProject: Project = {
-      id: generateId(),
-      title: "",
-      description: "",
-      imageUrl: null,
-      technologies: [],
-      liveUrl: "",
-      githubUrl: "",
-    };
-    setProjects([...projects, newProject]);
-  };
-
-  const updateProject = (id: string, field: keyof Project, value: any) => {
-    setProjects(projects.map((p) => (p.id === id ? { ...p, [field]: value } : p)));
-  };
-
-  const removeProject = (id: string) => {
-    setProjects(projects.filter((p) => p.id !== id));
+  // Converts the existing form's field updates
+  // into the format expected by useDraft().
+  const updateProject = <K extends keyof PortfolioProject,>(
+    id: string,
+    field: K,
+    value: PortfolioProject[K]
+  ) => {
+    updateDraftProject(id, { [field]: value } as Partial<PortfolioProject>);
   };
 
   const addTechnology = (projectId: string) => {
@@ -79,9 +71,9 @@ export default function ProjectsStep() {
                 type="button"
                 onClick={() => removeProject(project.id)}
                 className={styles.deleteButton}
-                aria-label={`Delete ${project.title || "project"}`}
+                aria-label={`Remove ${project.title || "project"}`}
               >
-                ✕
+                Remove project
               </button>
             </div>
 
@@ -186,8 +178,8 @@ export default function ProjectsStep() {
       )}
 
       <p className={styles.draftNote}>
-        Your changes are local to this page for now. Saving and live preview will be connected in a separate task.
-      </p>
+      Your projects are saved automatically in this browser.
+      They are not public until you publish your portfolio.      </p>
     </form>
   );
 }

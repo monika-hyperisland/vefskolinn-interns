@@ -4,16 +4,27 @@ import ProfileStep from "../steps/ProfileStep";
 import ProjectsStep from "../steps/ProjectsStep";
 import ThemeStep from "../steps/ThemeStep";
 import ContactStep from "../steps/ContactStep";
-import type { LocalDraft, PortfolioTheme } from "types/portfolioTypes";
+import type { LocalDraft, PortfolioTheme, PortfolioProject,
+ } from "types/portfolioTypes";
 
 type SidePanelProps = {
   activeStep: PortfolioStepId;
   draft: LocalDraft;
   setTheme: (theme: PortfolioTheme) => void;
+  addProject: () => void;
+  updateProject: (id: string, changes: Partial<PortfolioProject>) => void;
+  removeProject: (id: string) => void;
 };
 
 // The form fields for each step belong to their own GitHub tasks.
-export default function SidePanel({ activeStep, draft, setTheme }: SidePanelProps) {
+export default function SidePanel({ 
+  activeStep, 
+  draft, 
+  setTheme,
+  addProject,
+  updateProject,
+  removeProject
+}: SidePanelProps) {
   const stepNumber = PORTFOLIO_STEPS.findIndex((step) => step.id === activeStep) + 1;
   const stepName = PORTFOLIO_STEPS[stepNumber - 1].label;
 
@@ -26,7 +37,12 @@ export default function SidePanel({ activeStep, draft, setTheme }: SidePanelProp
     title = "Tell your story";
     description = "This is shown on your About page. Keep it short — visitors skim.";
   } else if (activeStep === "projects") {
-    stepContent = <ProjectsStep />;
+    stepContent = 
+      <ProjectsStep
+    projects={draft.content.projects}
+    addProject={addProject}
+    updateProject={updateProject}
+    removeProject={removeProject}/>;
     title = "Choose your best work";
     description = "Select projects from your course submissions. You can add up to six. Drag to change the order.";
   } else if (activeStep === "theme") {
